@@ -1,6 +1,8 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Observable} from 'rxjs';
-import {EmployeeModel} from '../../models/mates.model';
+import {EmployeeModel, IModify} from '../../models/mates.model';
+import {EmployeeService} from '../../services/employees/employee.service';
+import {ModifyEnum} from '../../models/modify.enum';
 
 @Component({
   selector: 'app-employee-table',
@@ -10,11 +12,24 @@ import {EmployeeModel} from '../../models/mates.model';
 })
 export class EmployeeTableComponent {
 
+  constructor(private cd: ChangeDetectorRef) {
+  }
+
   @Input()
   employees: Observable<EmployeeModel[]>;
 
-  getImagePath(email?: string): string {
-    const path = './assets/images/userpics/';
-    return email ? `${path}${email}.svg` : `${path}default.svg`;
+  @Output()
+  modify = new EventEmitter<IModify>();
+
+  modifyEnum = ModifyEnum;
+
+  getImagePath(email: string): string {
+    return EmployeeService.getImagePath(email);
   }
+
+  onModify(action: ModifyEnum, employee: EmployeeModel, employees: EmployeeModel[]): void {
+    this.modify.emit({action, employee, employees});
+  }
+
+
 }

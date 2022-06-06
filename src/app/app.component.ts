@@ -1,7 +1,8 @@
 import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {EmployeeService} from './services/employees/employee.service';
 import {Observable, Subscription} from 'rxjs';
-import {EmployeeModel} from './models/mates.model';
+import {EmployeeModel, IModify} from './models/mates.model';
+import {ModifyEnum} from './models/modify.enum';
 
 @Component({
   selector: 'app-root',
@@ -15,9 +16,11 @@ export class AppComponent implements OnDestroy {
 
   subscription: Subscription = new Subscription();
 
+  modifyEnum = ModifyEnum;
+
   constructor(private employeeService: EmployeeService) {
-    this.appInit();
     this.employees = this.employeeService.employees;
+    this.appInit();
   }
 
   appInit() {
@@ -26,6 +29,29 @@ export class AppComponent implements OnDestroy {
         (employees) => this.employeeService.setEmployees(employees)
       )
     )
+  }
+
+  /**
+   * Пользователь изменил данные сотрудника
+   * @param args action, employee, employees
+   */
+  modify(args: IModify): void {
+    const action = args.action;
+    const employee = args.employee;
+    const employees = args.employees;
+    switch (action) {
+      case this.modifyEnum.ADD:
+        this.employeeService.addEmployee(employee, employees);
+        break;
+      case this.modifyEnum.EDIT:
+        this.employeeService.editEmployee(employee, employees);
+        break;
+      case this.modifyEnum.DELETE:
+        this.employeeService.deleteEmployee(employee, employees);
+        break;
+      default:
+        break;
+    }
   }
 
   ngOnDestroy() {

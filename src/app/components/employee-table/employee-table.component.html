@@ -16,8 +16,8 @@
     <div class="last-name">{{employee.name.last}}</div>
     <div class="age">{{employee.age}}</div>
     <div class="actions">
-      <a href="">Edit</a>
-      <a href="">Delete</a>
+      <button (click)="onModify(modifyEnum.EDIT, employee, employees)">Edit</button>
+      <button (click)="onModify(modifyEnum.DELETE, employee, employees)">Delete</button>
     </div>
   </div>
 </ng-container>

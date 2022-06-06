@@ -1,3 +1,5 @@
+import {ModifyEnum} from './modify.enum';
+
 export interface MatesModel {
   guid: string;
   age: number;
@@ -12,4 +14,10 @@ export interface MateName {
 
 export interface EmployeeModel extends MatesModel {
   initials: string;
+}
+
+export interface IModify {
+  action: ModifyEnum,
+  employee: EmployeeModel,
+  employees: EmployeeModel[]
 }

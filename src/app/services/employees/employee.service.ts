@@ -53,7 +53,7 @@ export class EmployeeService {
    */
   editEmployee(editedEmployee: EmployeeModel, employees: EmployeeModel[]): void {
     const idx = EmployeeService.getIndex(editedEmployee, employees);
-    if (idx) {
+    if (idx !== -1) {
       employees[idx] = editedEmployee;
       this.setEmployees(employees);
     }
@@ -66,8 +66,9 @@ export class EmployeeService {
    */
   deleteEmployee(toDeleteEmployee: EmployeeModel, employees: EmployeeModel[]): void {
     const idx = EmployeeService.getIndex(toDeleteEmployee, employees);
-    if (idx) {
+    if (idx !== -1) {
       employees.splice(idx, 1);
+      this.setEmployees(employees);
     }
   }
 
@@ -77,8 +78,16 @@ export class EmployeeService {
    * @param employees
    */
   static getIndex(employee: EmployeeModel, employees: EmployeeModel[]): number {
-    const idx = employees.findIndex((employee) => employee.guid === employee.guid);
-    return idx !== -1 ? idx : 0;
+    return employees.findIndex((item) => item.guid === employee.guid);
+  }
+
+  /**
+   * Получить урл для аватарки
+   * @param email
+   */
+  static getImagePath(email?: string): string {
+    const path = './assets/images/userpics/';
+    return email ? `${path}${email}.svg` : `${path}default.svg`;
   }
 
 }
