@@ -12,4 +12,8 @@ export class EmployeeTableComponent {
 
   @Input()
   employees: Observable<EmployeeModel[]>;
+
+  getImagePath(email: string): string {
+    return `./assets/images/userpics/${email}.svg`;
+  }
 }
