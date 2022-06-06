@@ -8,6 +8,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class EmployeeService {
 
+  //единый источник правды
   private _employees: ReplaySubject<EmployeeModel[]> = new ReplaySubject<EmployeeModel[]>();
 
   get employees(): ReplaySubject<EmployeeModel[]> {
@@ -33,6 +34,51 @@ export class EmployeeService {
    */
   setEmployees(employees: EmployeeModel[]): void {
     this._employees.next(employees);
+  }
+
+  /**
+   * Добавить данные нового сотрудника
+   * @param newEmployee
+   * @param employees
+   */
+  addEmployee(newEmployee: EmployeeModel, employees: EmployeeModel[]): void {
+    employees.push(newEmployee);
+    this.setEmployees(employees);
+  }
+
+  /**
+   * Редактировать данные сотрудника
+   * @param editedEmployee
+   * @param employees
+   */
+  editEmployee(editedEmployee: EmployeeModel, employees: EmployeeModel[]): void {
+    const idx = EmployeeService.getIndex(editedEmployee, employees);
+    if (idx) {
+      employees[idx] = editedEmployee;
+      this.setEmployees(employees);
+    }
+  }
+
+  /**
+   * Удалить данные сотрудника
+   * @param toDeleteEmployee
+   * @param employees
+   */
+  deleteEmployee(toDeleteEmployee: EmployeeModel, employees: EmployeeModel[]): void {
+    const idx = EmployeeService.getIndex(toDeleteEmployee, employees);
+    if (idx) {
+      employees.splice(idx, 1);
+    }
+  }
+
+  /**
+   * Найти индекс сотрудника
+   * @param employee
+   * @param employees
+   */
+  static getIndex(employee: EmployeeModel, employees: EmployeeModel[]): number {
+    const idx = employees.findIndex((employee) => employee.guid === employee.guid);
+    return idx !== -1 ? idx : 0;
   }
 
 }

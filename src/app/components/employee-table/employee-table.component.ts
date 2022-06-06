@@ -13,7 +13,8 @@ export class EmployeeTableComponent {
   @Input()
   employees: Observable<EmployeeModel[]>;
 
-  getImagePath(email: string): string {
-    return `./assets/images/userpics/${email}.svg`;
+  getImagePath(email?: string): string {
+    const path = './assets/images/userpics/';
+    return email ? `${path}${email}.svg` : `${path}default.svg`;
   }
 }
