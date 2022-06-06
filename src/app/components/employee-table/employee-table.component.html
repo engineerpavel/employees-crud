@@ -1,6 +1,6 @@
 <ng-container *ngIf="(employees | async) as employees; else notFound">
   <div class="titles">
-    <div class="user-pic"></div>
+    <div class="user-pic">Avatar</div>
     <div class="initials">info</div>
     <div class="first-name">First Name</div>
     <div class="last-name">Last Name</div>
@@ -9,7 +9,7 @@
   </div>
   <div *ngFor="let employee of employees" class="employee-area">
     <div class="user-pic">1</div>
-    <div class="initials">2</div>
+    <div class="initials">{{employee.initials}}</div>
     <div class="first-name">{{employee.name.first}}</div>
     <div class="last-name">{{employee.name.last}}</div>
     <div class="age">{{employee.age}}</div>

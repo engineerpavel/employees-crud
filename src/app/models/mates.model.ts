@@ -9,3 +9,7 @@ export interface MateName {
   first: string;
   last: string;
 }
+
+export interface EmployeeModel extends MatesModel {
+  initials: string;
+}

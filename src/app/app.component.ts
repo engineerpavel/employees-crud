@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {EmployeeService} from './services/employees/employee.service';
-import {Observable} from 'rxjs';
-import {MatesModel} from './models/mates.model';
+import {Observable, Subscription} from 'rxjs';
+import {EmployeeModel} from './models/mates.model';
 
 @Component({
   selector: 'app-root',
@@ -9,14 +9,27 @@ import {MatesModel} from './models/mates.model';
   styleUrls: ['./app.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnDestroy {
 
-  employees: Observable<MatesModel[]>;
+  employees: Observable<EmployeeModel[]>;
+
+  subscription: Subscription = new Subscription();
 
   constructor(private employeeService: EmployeeService) {
+    this.appInit();
+    this.employees = this.employeeService.employees;
   }
 
-  ngOnInit() {
-    this.employees = this.employeeService.loadEmployeesData();
+  appInit() {
+    this.subscription.add(
+      this.employeeService.loadEmployeesData().subscribe(
+        (employees) => this.employeeService.setEmployees(employees)
+      )
+    )
+  }
+
+  ngOnDestroy() {
+    //отписочка от подписочек
+    this.subscription.unsubscribe();
   }
 }

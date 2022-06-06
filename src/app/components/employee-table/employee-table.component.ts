@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Observable} from 'rxjs';
-import {MatesModel} from '../../models/mates.model';
+import {EmployeeModel} from '../../models/mates.model';
 
 @Component({
   selector: 'app-employee-table',
@@ -11,5 +11,5 @@ import {MatesModel} from '../../models/mates.model';
 export class EmployeeTableComponent {
 
   @Input()
-  employees: Observable<MatesModel[]>;
+  employees: Observable<EmployeeModel[]>;
 }
