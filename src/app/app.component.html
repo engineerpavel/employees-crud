@@ -1,1 +1,19 @@
-<app-employee-table (modify)="modify($event)" [employees]="employees" ></app-employee-table>
+<div class="title">Employees</div>
+<ng-container *ngIf="(employees | async)?.length; else notFound">
+  <app-employee-table *ngIf="(employees | async) as emp"
+                      (modify)="modify($event)"
+                      [employees]="emp" >
+  </app-employee-table>
+</ng-container>
+<ng-template #notFound>
+  <div class="error">No employees found</div>
+</ng-template>
+<button class="create-btn"
+        (click)="modify({action: modifyEnum.ADD, employee: null, employees: []})">
+  Create
+</button>
+<app-dialog
+  *ngIf="isShowDialog"
+  [type]="dialogType"
+  (btnClicked)="onDialogClosed($event)">
+</app-dialog>

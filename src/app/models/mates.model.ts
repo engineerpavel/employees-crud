@@ -18,6 +18,6 @@ export interface EmployeeModel extends MatesModel {
 
 export interface IModify {
   action: ModifyEnum,
-  employee: EmployeeModel,
+  employee: EmployeeModel | null,
   employees: EmployeeModel[]
 }

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {EmployeeService} from './services/employees/employee.service';
-import {Observable, Subscription} from 'rxjs';
+import {Observable, shareReplay, Subscription} from 'rxjs';
 import {EmployeeModel, IModify} from './models/mates.model';
 import {ModifyEnum} from './models/modify.enum';
 
@@ -12,14 +12,17 @@ import {ModifyEnum} from './models/modify.enum';
 })
 export class AppComponent implements OnDestroy {
 
-  employees: Observable<EmployeeModel[]>;
+  employees: Observable<EmployeeModel[]> = this.employeeService.employees;
 
   subscription: Subscription = new Subscription();
 
   modifyEnum = ModifyEnum;
 
+  dialogType: ModifyEnum;
+
+  isShowDialog = false;
+
   constructor(private employeeService: EmployeeService) {
-    this.employees = this.employeeService.employees;
     this.appInit();
   }
 
@@ -41,17 +44,32 @@ export class AppComponent implements OnDestroy {
     const employees = args.employees;
     switch (action) {
       case this.modifyEnum.ADD:
-        this.employeeService.addEmployee(employee, employees);
+        this.openCreateDialog();
+        // this.employeeService.addEmployee(employee, employees);
         break;
       case this.modifyEnum.EDIT:
-        this.employeeService.editEmployee(employee, employees);
+        if (employee) {
+          this.employeeService.editEmployee(employee, employees);
+        }
         break;
       case this.modifyEnum.DELETE:
-        this.employeeService.deleteEmployee(employee, employees);
+        if (employee) {
+          this.employeeService.deleteEmployee(employee, employees);
+        }
         break;
       default:
         break;
     }
+  }
+
+  onDialogClosed(action: ModifyEnum): void {
+    console.log('onDialogClosed', action);
+    this.isShowDialog = false;
+  }
+
+  openCreateDialog(): void {
+    this.dialogType = this.modifyEnum.ADD;
+    this.isShowDialog = true;
   }
 
   ngOnDestroy() {

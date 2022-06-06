@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="form">
+    <div class="input-block">
+      <label for="name">First name</label>
+      <input id="name" type="text">
+    </div>
+    <div class="input-block">
+      <label for="surname">Last name</label>
+      <input id="surname" type="text">
+    </div>
+    <div class="input-block">
+      <label for="age">Age</label>
+      <input id="age" type="number">
+    </div>
+    <div class="btn-block">
+      <button *ngIf="type === modifyEnum.ADD" (click)="onBtnClicked(modifyEnum.ADD)">Создать</button>
+      <button *ngIf="type === modifyEnum.EDIT" (click)="onBtnClicked(modifyEnum.EDIT)">Сохранить</button>
+      <button *ngIf="type === modifyEnum.DELETE" (click)="onBtnClicked(modifyEnum.DELETE)">Удалить</button>
+      <button (click)="onBtnClicked(modifyEnum.CLOSE)">Закрыть</button>
+    </div>
+  </div>
+
+</div>

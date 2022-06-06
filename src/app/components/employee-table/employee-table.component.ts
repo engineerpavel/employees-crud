@@ -1,5 +1,9 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
-import {Observable} from 'rxjs';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output
+} from '@angular/core';
 import {EmployeeModel, IModify} from '../../models/mates.model';
 import {EmployeeService} from '../../services/employees/employee.service';
 import {ModifyEnum} from '../../models/modify.enum';
@@ -7,16 +11,12 @@ import {ModifyEnum} from '../../models/modify.enum';
 @Component({
   selector: 'app-employee-table',
   templateUrl: './employee-table.component.html',
-  styleUrls: ['./employee-table.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./employee-table.component.less']
 })
 export class EmployeeTableComponent {
 
-  constructor(private cd: ChangeDetectorRef) {
-  }
-
   @Input()
-  employees: Observable<EmployeeModel[]>;
+  employees: EmployeeModel[];
 
   @Output()
   modify = new EventEmitter<IModify>();
@@ -30,6 +30,4 @@ export class EmployeeTableComponent {
   onModify(action: ModifyEnum, employee: EmployeeModel, employees: EmployeeModel[]): void {
     this.modify.emit({action, employee, employees});
   }
-
-
 }
