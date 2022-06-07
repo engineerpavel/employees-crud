@@ -69,6 +69,10 @@ export class AppComponent implements OnDestroy {
     }
   }
 
+  /**
+   * Действие при закрытии диалогового окна
+   * @param res
+   */
   onDialogClosed(res?: IFormResult): void {
     this.isShowDialog = false;
     if (res) {
@@ -79,18 +83,25 @@ export class AppComponent implements OnDestroy {
         case ModifyEnum.EDIT:
           this.employeeService.editEmployee(res.formValue);
           break;
-
+        default:
+          break;
       }
     }
-
   }
 
+  /**
+   * Открыть диалог создания
+   */
   openCreateDialog(): void {
     this.form.reset();
     this.dialogType = this.modifyEnum.ADD;
     this.isShowDialog = true;
   }
 
+  /**
+   * Открыть диалог редактирования
+   * @param employee
+   */
   openEditDialog(employee: MatesModel): void {
     this.form = this.fb.group({
       firstName: [employee.name.first, Validators.required],
@@ -104,6 +115,10 @@ export class AppComponent implements OnDestroy {
     this.isShowDialog = true;
   }
 
+  /**
+   * Открыть диалог удаления
+   * @param employee
+   */
   openDeleteDialog(employee: MatesModel): void {
     this.dialogType = this.modifyEnum.DELETE;
     this.isShowDialog = true;
