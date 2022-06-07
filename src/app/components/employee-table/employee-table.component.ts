@@ -4,7 +4,7 @@ import {
   Input,
   Output
 } from '@angular/core';
-import {EmployeeModel, IModify} from '../../models/mates.model';
+import {IModify, MatesModel} from '../../models/mates.model';
 import {EmployeeService} from '../../services/employees/employee.service';
 import {ModifyEnum} from '../../models/modify.enum';
 
@@ -16,7 +16,7 @@ import {ModifyEnum} from '../../models/modify.enum';
 export class EmployeeTableComponent {
 
   @Input()
-  employees: EmployeeModel[];
+  employees: MatesModel[];
 
   @Output()
   modify = new EventEmitter<IModify>();
@@ -27,7 +27,11 @@ export class EmployeeTableComponent {
     return EmployeeService.getImagePath(email);
   }
 
-  onModify(action: ModifyEnum, employee: EmployeeModel, employees: EmployeeModel[]): void {
+  onModify(action: ModifyEnum, employee: MatesModel, employees: MatesModel[]): void {
     this.modify.emit({action, employee, employees});
+  }
+
+  getInitials(mate: MatesModel): string {
+    return `${mate.name.first.charAt(0)}.${mate.name.last.charAt(0)}. - ${mate.email}`
   }
 }

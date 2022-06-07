@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { EmployeeTableComponent } from './components/employee-table/employee-table.component';
 import {HttpClientModule} from '@angular/common/http';
 import { DialogComponent } from './components/dialog/dialog.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -13,11 +14,12 @@ import { DialogComponent } from './components/dialog/dialog.component';
     EmployeeTableComponent,
     DialogComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        ReactiveFormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

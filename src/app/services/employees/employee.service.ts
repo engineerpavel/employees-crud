@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import {map, Observable, ReplaySubject} from 'rxjs';
-import {EmployeeModel, MatesModel} from '../../models/mates.model';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {IFormFields, MatesModel} from '../../models/mates.model';
 import {HttpClient} from '@angular/common/http';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,9 @@ import {HttpClient} from '@angular/common/http';
 export class EmployeeService {
 
   //единый источник правды
-  private _employees: ReplaySubject<EmployeeModel[]> = new ReplaySubject<EmployeeModel[]>();
+  private _employees: BehaviorSubject<MatesModel[] | null> = new BehaviorSubject<MatesModel[] | null>(null);
 
-  get employees(): ReplaySubject<EmployeeModel[]> {
+  get employees(): BehaviorSubject<MatesModel[] | null> {
     return this._employees;
   }
 
@@ -20,55 +21,70 @@ export class EmployeeService {
   /**
    * Загрузить данные из mates.json и смапить новое поле
    */
-  loadEmployeesData(): Observable<EmployeeModel[]> {
-    return this.http.get<MatesModel[]>('./assets/json/mates.json').pipe(
-        map((matesArr) => matesArr
-          .map((mate) => (
-            {...mate, initials: `${mate.name.first.charAt(0)}.${mate.name.last.charAt(0)}. - ${mate.email}`})
-        )));
+  loadEmployeesData(): Observable<MatesModel[]> {
+    return this.http.get<MatesModel[]>('./assets/json/mates.json');
   }
 
   /**
    * Поместить новые данные в Subject _employees
    * @param employees
    */
-  setEmployees(employees: EmployeeModel[]): void {
+  setEmployees(employees: MatesModel[]): void {
     this._employees.next(employees);
   }
 
   /**
    * Добавить данные нового сотрудника
-   * @param newEmployee
-   * @param employees
+   * @param formFields
    */
-  addEmployee(newEmployee: EmployeeModel, employees: EmployeeModel[]): void {
-    employees.push(newEmployee);
-    this.setEmployees(employees);
+  addEmployee(formFields: IFormFields): void {
+    const employees = this._employees.getValue();
+    const newEmployee = this.createEmployee(formFields);
+    if (employees) {
+      employees.push(newEmployee);
+      this.setEmployees(employees);
+    }
+  }
+
+  createEmployee(formFields: IFormFields): MatesModel {
+    return {
+      guid: formFields.guid ? formFields.guid : uuidv4(),
+      age: formFields.age,
+      name: {
+        first: formFields.firstName,
+        last: formFields.lastName
+      },
+      email: formFields.email
+    }
   }
 
   /**
    * Редактировать данные сотрудника
    * @param editedEmployee
-   * @param employees
    */
-  editEmployee(editedEmployee: EmployeeModel, employees: EmployeeModel[]): void {
-    const idx = EmployeeService.getIndex(editedEmployee, employees);
-    if (idx !== -1) {
-      employees[idx] = editedEmployee;
-      this.setEmployees(employees);
+  editEmployee(editedEmployee: MatesModel): void {
+    const employees = this._employees.getValue();
+    if (employees) {
+      const idx = EmployeeService.getIndex(editedEmployee, employees);
+      if (idx !== -1) {
+        employees[idx] = editedEmployee;
+        this.setEmployees(employees);
+      }
     }
   }
 
   /**
    * Удалить данные сотрудника
    * @param toDeleteEmployee
-   * @param employees
    */
-  deleteEmployee(toDeleteEmployee: EmployeeModel, employees: EmployeeModel[]): void {
-    const idx = EmployeeService.getIndex(toDeleteEmployee, employees);
-    if (idx !== -1) {
-      employees.splice(idx, 1);
-      this.setEmployees(employees);
+  deleteEmployee(toDeleteEmployee: MatesModel): void {
+    const employees = this._employees.getValue();
+    if (employees) {
+      const idx = EmployeeService.getIndex(toDeleteEmployee, employees);
+      if (idx !== -1) {
+        employees.splice(idx, 1);
+        this.setEmployees(employees);
+      }
     }
   }
 
@@ -77,7 +93,7 @@ export class EmployeeService {
    * @param employee
    * @param employees
    */
-  static getIndex(employee: EmployeeModel, employees: EmployeeModel[]): number {
+  static getIndex(employee: MatesModel, employees: MatesModel[]): number {
     return employees.findIndex((item) => item.guid === employee.guid);
   }
 

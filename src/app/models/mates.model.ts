@@ -12,12 +12,21 @@ export interface MateName {
   last: string;
 }
 
-export interface EmployeeModel extends MatesModel {
-  initials: string;
-}
-
 export interface IModify {
   action: ModifyEnum,
-  employee: EmployeeModel | null,
-  employees: EmployeeModel[]
+  employee: MatesModel | null,
+  employees: MatesModel[]
+}
+
+export interface IFormFields {
+  firstName: string,
+  lastName: string,
+  age: number,
+  email: string;
+  guid?: string;
+}
+
+export interface IFormResult {
+  action: ModifyEnum,
+  formValue: IFormFields;
 }

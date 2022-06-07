@@ -1,16 +1,20 @@
 <div class="container">
-  <div class="form">
+  <div [formGroup]="form" class="form">
     <div class="input-block">
       <label for="name">First name</label>
-      <input id="name" type="text">
+      <input formControlName="firstName" id="name" type="text">
     </div>
     <div class="input-block">
       <label for="surname">Last name</label>
-      <input id="surname" type="text">
+      <input formControlName="lastName" id="surname" type="text">
     </div>
     <div class="input-block">
       <label for="age">Age</label>
-      <input id="age" type="number">
+      <input formControlName="age" id="age" type="number">
+    </div>
+    <div class="input-block">
+      <label for="email">E-mail</label>
+      <input formControlName="email" id="email" type="email">
     </div>
     <div class="btn-block">
       <button *ngIf="type === modifyEnum.ADD" (click)="onBtnClicked(modifyEnum.ADD)">Создать</button>
@@ -19,5 +23,4 @@
       <button (click)="onBtnClicked(modifyEnum.CLOSE)">Закрыть</button>
     </div>
   </div>
-
 </div>

@@ -10,7 +10,7 @@
   <div class="user-pic">
     <img [src]=getImagePath(employee.email) alt="аватар">
   </div>
-  <div class="initials">{{employee.initials}}</div>
+  <div class="initials">{{getInitials(employee)}}</div>
   <div class="first-name">{{employee.name.first}}</div>
   <div class="last-name">{{employee.name.last}}</div>
   <div class="age">{{employee.age}}</div>

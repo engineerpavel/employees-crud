@@ -15,5 +15,5 @@
 <app-dialog
   *ngIf="isShowDialog"
   [type]="dialogType"
-  (btnClicked)="onDialogClosed($event)">
+  (formValue)="onDialogClosed($event)">
 </app-dialog>
