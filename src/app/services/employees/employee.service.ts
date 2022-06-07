@@ -39,14 +39,18 @@ export class EmployeeService {
    */
   addEmployee(formFields: IFormFields): void {
     const employees = this._employees.getValue();
-    const newEmployee = this.createEmployee(formFields);
+    const newEmployee = this.enrichEmployee(formFields);
     if (employees) {
       employees.push(newEmployee);
       this.setEmployees(employees);
     }
   }
 
-  createEmployee(formFields: IFormFields): MatesModel {
+  /**
+   * Обогощает данные сотрудника
+   * @param formFields
+   */
+  enrichEmployee(formFields: IFormFields): MatesModel {
     return {
       guid: formFields.guid ? formFields.guid : uuidv4(),
       age: formFields.age,
@@ -60,14 +64,15 @@ export class EmployeeService {
 
   /**
    * Редактировать данные сотрудника
-   * @param editedEmployee
+   * @param formFields
    */
-  editEmployee(editedEmployee: MatesModel): void {
+  editEmployee(formFields: IFormFields): void {
     const employees = this._employees.getValue();
+    const enrichedEmployee = this.enrichEmployee(formFields);
     if (employees) {
-      const idx = EmployeeService.getIndex(editedEmployee, employees);
+      const idx = EmployeeService.getIndex(enrichedEmployee, employees);
       if (idx !== -1) {
-        employees[idx] = editedEmployee;
+        employees[idx] = enrichedEmployee;
         this.setEmployees(employees);
       }
     }
@@ -103,7 +108,7 @@ export class EmployeeService {
    */
   static getImagePath(email?: string): string {
     const path = './assets/images/userpics/';
-    return email ? `${path}${email}.svg` : `${path}default.svg`;
+    return email?.indexOf('undefined') !== -1 ? `${path}${email}.svg` : `${path}default.svg`;
   }
 
 }

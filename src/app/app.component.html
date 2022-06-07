@@ -9,11 +9,12 @@
   <div class="error">No employees found</div>
 </ng-template>
 <button class="create-btn"
-        (click)="modify({action: modifyEnum.ADD, employee: null, employees: []})">
+        (click)="modify({action: modifyEnum.ADD, employee: null})">
   Create
 </button>
 <app-dialog
   *ngIf="isShowDialog"
   [type]="dialogType"
+  [form]="form"
   (formValue)="onDialogClosed($event)">
 </app-dialog>

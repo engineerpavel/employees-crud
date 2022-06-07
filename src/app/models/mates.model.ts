@@ -15,7 +15,6 @@ export interface MateName {
 export interface IModify {
   action: ModifyEnum,
   employee: MatesModel | null,
-  employees: MatesModel[]
 }
 
 export interface IFormFields {

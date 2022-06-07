@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ModifyEnum} from '../../models/modify.enum';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IFormResult} from '../../models/mates.model';
 
 @Component({
@@ -8,31 +8,33 @@ import {IFormResult} from '../../models/mates.model';
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.less']
 })
-export class DialogComponent {
+export class DialogComponent implements OnInit {
 
   @Input()
   type: ModifyEnum;
 
   @Input()
-  form = this.fb.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    age: [0, [Validators.required, Validators.min(1)]],
-    email: ['', [Validators.required, Validators.email]],
-    guid: ['']
-  });
+  form: FormGroup;
 
   @Output()
   formValue = new EventEmitter<IFormResult | undefined>();
+
+  actionBtnPressed = false;
 
   modifyEnum = ModifyEnum;
 
   constructor(private fb: FormBuilder) { }
 
+  ngOnInit() {
+    this.actionBtnPressed = false;
+  }
+
   /**
    * Нажата кнопка
    */
   onBtnClicked(action: ModifyEnum): void {
+    this.actionBtnPressed = true;
+
     if (this.form.valid) {
       this.formValue.emit({
         action: action,

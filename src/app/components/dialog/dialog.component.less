@@ -38,8 +38,23 @@
       }
 
       input.ng-touched.ng-invalid {
-        border: solid red 2px;
+        border: solid @redError 2px;
       }
+
+      label:after {
+        content:" *";
+        color: @redError;
+      }
+    }
+
+    .validation-err {
+      display: flex;
+      justify-content: center;
+      margin-top: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 1.2;
+      color: @redError;
     }
 
 

@@ -3,6 +3,7 @@ import {EmployeeService} from './services/employees/employee.service';
 import {Observable, Subscription} from 'rxjs';
 import {IFormResult, IModify, MatesModel} from './models/mates.model';
 import {ModifyEnum} from './models/modify.enum';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,15 @@ export class AppComponent implements OnDestroy {
 
   isShowDialog = false;
 
-  constructor(private employeeService: EmployeeService) {
+  form: FormGroup = this.fb.group({
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    age: [0, [Validators.required, Validators.min(1)]],
+    email: ['', [Validators.required, Validators.email]],
+    guid: ['']
+  });
+
+  constructor(private employeeService: EmployeeService, private fb: FormBuilder) {
     this.appInit();
   }
 
@@ -41,14 +50,13 @@ export class AppComponent implements OnDestroy {
   modify(args: IModify): void {
     const action = args.action;
     const employee = args.employee;
-    const employees = args.employees;
     switch (action) {
       case this.modifyEnum.ADD:
         this.openCreateDialog();
         break;
       case this.modifyEnum.EDIT:
         if (employee) {
-          this.employeeService.editEmployee(employee);
+          this.openEditDialog(employee);
         }
         break;
       case this.modifyEnum.DELETE:
@@ -66,19 +74,32 @@ export class AppComponent implements OnDestroy {
     if (res) {
       switch (res.action) {
         case ModifyEnum.ADD:
-          // this.employeeService.addEmployee(res.formValue, employees);
+          this.employeeService.addEmployee(res.formValue);
           break;
+        case ModifyEnum.EDIT:
+          this.employeeService.editEmployee(res.formValue);
+          break;
+
       }
     }
 
   }
 
   openCreateDialog(): void {
+    this.form.reset();
     this.dialogType = this.modifyEnum.ADD;
     this.isShowDialog = true;
   }
 
   openEditDialog(employee: MatesModel): void {
+    this.form = this.fb.group({
+      firstName: [employee.name.first, Validators.required],
+      lastName: [employee.name.last, Validators.required],
+      age: [employee.age, [Validators.required, Validators.min(1)]],
+      email: [employee.email, [Validators.required, Validators.email]],
+      guid: [employee.guid]
+    });
+
     this.dialogType = this.modifyEnum.EDIT;
     this.isShowDialog = true;
   }

@@ -27,8 +27,8 @@ export class EmployeeTableComponent {
     return EmployeeService.getImagePath(email);
   }
 
-  onModify(action: ModifyEnum, employee: MatesModel, employees: MatesModel[]): void {
-    this.modify.emit({action, employee, employees});
+  onModify(action: ModifyEnum, employee: MatesModel): void {
+    this.modify.emit({action, employee});
   }
 
   getInitials(mate: MatesModel): string {

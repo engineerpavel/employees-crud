@@ -16,6 +16,8 @@
       <label for="email">E-mail</label>
       <input formControlName="email" id="email" type="email">
     </div>
+    <div *ngIf="!form.valid && actionBtnPressed" class="validation-err">Please complete all fields marked with an asterisk.</div>
+
     <div class="btn-block">
       <button *ngIf="type === modifyEnum.ADD" (click)="onBtnClicked(modifyEnum.ADD)">Создать</button>
       <button *ngIf="type === modifyEnum.EDIT" (click)="onBtnClicked(modifyEnum.EDIT)">Сохранить</button>
